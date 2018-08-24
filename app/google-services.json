@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "681939049838",
+    "firebase_url": "https://mobileusagerestriction-f84e3.firebaseio.com",
+    "project_id": "mobileusagerestriction-f84e3",
+    "storage_bucket": "mobileusagerestriction-f84e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681939049838:android:2ce49a9ba313069c",
+        "android_client_info": {
+          "package_name": "vatsalchavda.mobileusagerestriction"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681939049838-bvfjdkgkags2th29cvddn8fimpfils6o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vatsalchavda.mobileusagerestriction",
+            "certificate_hash": "91e8c7e591e1be60ed2209fb813a88d82132f2e5"
+          }
+        },
+        {
+          "client_id": "681939049838-uhbcfbbvkrjsumd7p202chbfntqr9d1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4-xcnphkFC06XvczMYBwmEjsiOJ6LCLo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681939049838-uhbcfbbvkrjsumd7p202chbfntqr9d1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
