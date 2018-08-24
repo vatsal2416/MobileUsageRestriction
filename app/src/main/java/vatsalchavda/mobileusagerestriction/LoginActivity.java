@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         Toast.makeText(getApplicationContext(),"Facebook login successful.",Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(LoginActivity.this, LoginSuccess.class));
+                        startActivity(new Intent(LoginActivity.this, LocationActivity.class));
                     }
 
                     @Override
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(emailAndPassword.methodLogin(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()))){
-                    Intent intent = new Intent(LoginActivity.this, LoginSuccess.class);
+                    Intent intent = new Intent(LoginActivity.this, LocationActivity.class);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(),"Authentication Failed!"
@@ -225,7 +225,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-                            startActivity(new Intent(LoginActivity.this,LoginSuccess.class));
+                            startActivity(new Intent(LoginActivity.this,LocationActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(getApplicationContext(),"Authentication Failed!",Toast.LENGTH_SHORT).show();
