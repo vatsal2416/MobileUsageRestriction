@@ -1,6 +1,7 @@
 package vatsalchavda.mobileusagerestriction;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -18,12 +20,17 @@ public class LoginSuccess extends AppCompatActivity {
 
     private Button logoutBtn;
     private GoogleSignInOptions gso;
+    LoginManager loginManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_success);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        
         logoutBtn = findViewById(R.id.logoutBtn);
+        //Facebook
+        loginManager = LoginManager.getInstance();
 
         // Configure Google Sign In
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -34,6 +41,7 @@ public class LoginSuccess extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signOut();
+                loginManager.logOut();
                 System.out.println("Signed out Successfully.");
                 startActivity(new Intent(LoginSuccess.this, LoginActivity.class));
             }
