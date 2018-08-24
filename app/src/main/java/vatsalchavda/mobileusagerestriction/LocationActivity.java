@@ -15,8 +15,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -49,6 +56,10 @@ import butterknife.OnClick;
 
 public class LocationActivity extends AppCompatActivity {
 
+
+    private Button logoutBtn;
+    private GoogleSignInOptions gso;
+    LoginManager loginManager;
     public static final String TAG = LocationActivity.class.getSimpleName();
 
     @BindView(R.id.location_result)
@@ -95,12 +106,39 @@ public class LocationActivity extends AppCompatActivity {
 
         distance = findViewById(R.id.textView3);
         speed = findViewById(R.id.textView4);
-
+        logoutBtn = findViewById(R.id.logoutBtn);
         //initialize the libraries
         init();
 
-        //restore the values from saved instance state
+        //Facebook
+        loginManager = LoginManager.getInstance();
 
+        // Configure Google Sign In
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        logoutBtn.setVisibility(View.VISIBLE);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+                loginManager.logOut();
+                System.out.println("Signed out Successfully.");
+                startActivity(new Intent(LocationActivity.this, LoginActivity.class));
+            }
+        });
+
+    }
+
+    private void signOut() {
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(),"Logged out",Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void init(){
