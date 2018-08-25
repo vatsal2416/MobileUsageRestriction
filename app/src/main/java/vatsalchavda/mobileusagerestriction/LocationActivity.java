@@ -128,7 +128,10 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
+        restoreValuesFromBundle(savedInstanceState);
     }
+
+
 
     private void signOut() {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
@@ -178,7 +181,6 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     //Restoring values from saved instance state
-
     private void restoreValuesFromBundle(Bundle savedInstanceState){
         if(savedInstanceState != null){
             if(savedInstanceState.containsKey("is_requesting_updates")){
@@ -215,8 +217,9 @@ public class LocationActivity extends AppCompatActivity {
 
             tripDistance = getDistance(startLatitude,startLongitude,endLatitude,endLongitude);
 
+            double calSpeed = mCurrentLocation.getSpeed() * 1.60934;
             distance.setText("Distance : "+String.valueOf(Math.round(tripDistance)));
-            speed.setText("Speed : "+String.valueOf(mCurrentLocation.getSpeed()));
+            speed.setText("Speed : "+calSpeed);
 
             //givina a blink animation on TextView
             txtLocationResult.setAlpha(0);

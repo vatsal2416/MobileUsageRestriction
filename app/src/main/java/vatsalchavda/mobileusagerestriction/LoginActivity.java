@@ -138,11 +138,15 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(emailAndPassword.methodRegister(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()))){
-                    Toast.makeText(getApplicationContext(),"You have successfully registered."
-                            +"\nCheck your email for Verification.",Toast.LENGTH_SHORT).show();
+                if(String.valueOf(textEmail.getText()).equals("") || String.valueOf(textPassword.getText()).equals("")){
+                    Toast.makeText(getApplicationContext(),"Email and Password cannot be blank.",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getApplicationContext(),"Something went wrong please try again.",Toast.LENGTH_SHORT).show();
+                    if(emailAndPassword.methodRegister(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()))){
+                        Toast.makeText(getApplicationContext(),"You have successfully registered."
+                                +"\nCheck your email for Verification.",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Something went wrong please try again.",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
