@@ -2,6 +2,8 @@ package vatsalchavda.mobileusagerestriction;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.karan.churi.PermissionManager.PermissionManager;
 
 import java.util.Arrays;
 
@@ -54,12 +57,19 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private static final String EMAIL = "email";
-
+    private boolean login, register, ForgotPassword;
+    private PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //Get Required Permissions
+        permissionManager = new PermissionManager() {};
+        permissionManager.checkAndRequestPermissions(this);
+
+
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //Initialize Facebook SDK
         FacebookSdk.sdkInitialize(FacebookSdk.getApplicationContext());
@@ -67,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.facebookLogin);
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        login = false;
+        register = false;
+        ForgotPassword = false;
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -123,9 +136,12 @@ public class LoginActivity extends AppCompatActivity {
 
         //Login with Email and Password
         loginBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if(emailAndPassword.methodLogin(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()))){
+                login = emailAndPassword.methodLogin(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()));
+                Toast.makeText(getApplicationContext(),"Login : "+login,Toast.LENGTH_SHORT).show();
+                if(login){
                     Intent intent = new Intent(LoginActivity.this, LocationActivity.class);
                     startActivity(intent);
                 }else{
@@ -138,10 +154,18 @@ public class LoginActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                register = emailAndPassword.methodRegister(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()));
+
+                try {
+                    //wait(100);
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 if(String.valueOf(textEmail.getText()).equals("") || String.valueOf(textPassword.getText()).equals("")){
                     Toast.makeText(getApplicationContext(),"Email and Password cannot be blank.",Toast.LENGTH_SHORT).show();
                 }else{
-                    if(emailAndPassword.methodRegister(String.valueOf(textEmail.getText()),String.valueOf(textPassword.getText()))){
+                    if(register){
                         Toast.makeText(getApplicationContext(),"You have successfully registered."
                                 +"\nCheck your email for Verification.",Toast.LENGTH_SHORT).show();
                     }else{
@@ -154,10 +178,11 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ForgotPassword = emailAndPassword.methodForgotPassword(String.valueOf(textEmail.getText()));
                 if(String.valueOf(textEmail.getText()).equals("")){
                     Toast.makeText(getApplicationContext(),"Enter email address!",Toast.LENGTH_SHORT).show();
                 }else{
-                    if(emailAndPassword.methodForgotPassword(String.valueOf(textEmail.getText()))){
+                    if(ForgotPassword){
                         Toast.makeText(getApplicationContext(),"Successfully Sent Password reset link.",Toast.LENGTH_SHORT).show();
                     }else{
                         Toast.makeText(getApplicationContext(),"Failed! Email address doesn't exist.",Toast.LENGTH_SHORT).show();

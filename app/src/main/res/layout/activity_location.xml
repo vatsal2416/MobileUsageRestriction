@@ -64,4 +64,12 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSendSMS"
+        style="@android:style/Widget.Material.Button.Borderless.Small"
+        android:layout_width="match_parent"
+        android:onClick="sendSMSClass"
+        android:layout_height="wrap_content"
+        android:text="Send SMS" />
 </LinearLayout>

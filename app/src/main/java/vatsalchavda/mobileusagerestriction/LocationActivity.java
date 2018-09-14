@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,8 +32,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-
-
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,7 +54,7 @@ import butterknife.OnClick;
 public class LocationActivity extends AppCompatActivity {
 
 
-    private Button logoutBtn;
+    private Button logoutBtn,btnSendMsg;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
     public static final String TAG = LocationActivity.class.getSimpleName();
@@ -129,8 +126,13 @@ public class LocationActivity extends AppCompatActivity {
         });
 
         restoreValuesFromBundle(savedInstanceState);
+
+
     }
 
+    public void sendSMSClass(View view){
+        startActivity(new Intent(LocationActivity.this,SendSMS.class));
+    }
 
 
     private void signOut() {
@@ -147,6 +149,7 @@ public class LocationActivity extends AppCompatActivity {
     private void init(){
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mSettingsClient = LocationServices.getSettingsClient(this);
+
 
         mLocationCallback = new LocationCallback(){
             @Override

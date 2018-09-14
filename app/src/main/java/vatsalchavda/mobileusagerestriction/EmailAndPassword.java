@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 public class EmailAndPassword extends LoginActivity{
 
     FirebaseAuth mAuth;
+    FirebaseUser user;
     boolean LoginResult, RegisterResult, ForgotPasswordResult, EmailVerification;
     EmailAndPassword(){
         mAuth = FirebaseAuth.getInstance();
@@ -25,12 +26,18 @@ public class EmailAndPassword extends LoginActivity{
     //Login method
     public boolean methodLogin(String email, String password){
 
+         user = mAuth.getCurrentUser();
+
         if(isEmailValid(email)){
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(user.isEmailVerified()){
                             LoginResult = true;
+                        }else{
+                            LoginResult = false;
+                        }
                      }
                 });
             return LoginResult;
@@ -74,7 +81,6 @@ public class EmailAndPassword extends LoginActivity{
         }else
             return false;
     }
-
 
     public boolean methodForgotPassword(String email){
         if(isEmailValid(email)){
