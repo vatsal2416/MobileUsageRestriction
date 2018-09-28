@@ -17,5 +17,6 @@ Features added till now :
       > Gets Latitude and Longitude using Location class.
       > Gets Distance covered in Kilometers.
       > Gets Speed in Kilometers per Hour (KPH).
+    --Can send SMS
       
 Any updates will be added as soon as are Developed.
