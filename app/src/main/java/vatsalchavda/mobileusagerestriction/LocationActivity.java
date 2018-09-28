@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Looper;
@@ -53,10 +54,10 @@ import butterknife.OnClick;
 
 public class LocationActivity extends AppCompatActivity {
 
-
-    private Button logoutBtn,btnSendMsg;
+    Button logoutBtn, btnCallBlock;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
+    public static int callBlockPermission = 0;
     public static final String TAG = LocationActivity.class.getSimpleName();
 
     @BindView(R.id.location_result)
@@ -88,7 +89,7 @@ public class LocationActivity extends AppCompatActivity {
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
     private boolean locationAquired;
-    private double startLatitude,startLongitude,endLongitude,endLatitude,tripDistance;
+    double startLatitude,startLongitude,endLongitude,endLatitude,tripDistance;
     private TextView distance, speed;
     //boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
@@ -104,6 +105,7 @@ public class LocationActivity extends AppCompatActivity {
         distance = findViewById(R.id.textView3);
         speed = findViewById(R.id.textView4);
         logoutBtn = findViewById(R.id.logoutBtn);
+        btnCallBlock = findViewById(R.id.btnCallBlock);
         //initialize the libraries
         init();
 
@@ -127,6 +129,18 @@ public class LocationActivity extends AppCompatActivity {
 
         restoreValuesFromBundle(savedInstanceState);
 
+        btnCallBlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(callBlockPermission == 0){
+                    callBlockPermission = 1;
+                    Toast.makeText(getApplicationContext(),"Started call Blocking",Toast.LENGTH_SHORT).show();
+                }else if(callBlockPermission == 1){
+                    callBlockPermission = 0;
+                    Toast.makeText(getApplicationContext(),"Stopped call Blocking",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -202,13 +216,14 @@ public class LocationActivity extends AppCompatActivity {
 
     //Update the UI displaying the data and buttons
 
+    @SuppressLint("SetTextI18n")
     private void updateLocationUI(){
         if(mCurrentLocation != null){
             txtLocationResult.setText(
                     "Latitude: "+mCurrentLocation.getLatitude()+"\n"+
                             "Longitude: "+mCurrentLocation.getLongitude()
             );
-            if(locationAquired==false){
+            if(!locationAquired){
                 startLatitude = mCurrentLocation.getLatitude();
                 startLongitude = mCurrentLocation.getLongitude();
                 locationAquired=true;
@@ -274,6 +289,7 @@ public class LocationActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         int statuscode = ((ApiException) e).getStatusCode();
@@ -402,7 +418,7 @@ public class LocationActivity extends AppCompatActivity {
     private boolean checkPermissions(){
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        return permissionState == getPackageManager().PERMISSION_GRANTED;
+        return permissionState == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override

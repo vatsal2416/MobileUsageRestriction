@@ -10,7 +10,7 @@
         android:id="@+id/startBlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Call Block"
+        android:text="@string/start_call_block"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="39dp"
-        android:text="Stop Call Block"
+        android:text="@string/stop_call_block"
         app:layout_constraintStart_toStartOf="@+id/startBlock"
         app:layout_constraintTop_toBottomOf="@+id/startBlock" />
 </android.support.constraint.ConstraintLayout>

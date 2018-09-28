@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -9,7 +10,7 @@
         android:id="@+id/logoutBtn"
         android:layout_width="102dp"
         android:layout_height="38dp"
-        android:text="Logout" />
+        android:text="@string/logout" />
 
     <Button
         android:id="@+id/btn_start_location_updates"
@@ -53,7 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/textView3"
@@ -64,12 +66,24 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnSendSMS"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="sendSMSClass"
+            android:text="@string/send_sms" />
 
-    <Button
-        android:id="@+id/btnSendSMS"
-        style="@android:style/Widget.Material.Button.Borderless.Small"
-        android:layout_width="match_parent"
-        android:onClick="sendSMSClass"
-        android:layout_height="wrap_content"
-        android:text="Send SMS" />
+        <Button
+            android:id="@+id/btnCallBlock"
+            style="@android:style/Widget.Material.Button.Borderless.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/block_calls" />
+    </LinearLayout>
+
 </LinearLayout>

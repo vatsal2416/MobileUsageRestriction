@@ -17,7 +17,7 @@ import com.google.android.gms.tasks.Task;
 
 public class LoginSuccess extends AppCompatActivity {
 
-    private Button logoutBtn;
+    Button logoutBtn;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
 

@@ -2,17 +2,13 @@ package vatsalchavda.mobileusagerestriction;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,9 +18,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -45,9 +39,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView textEmail;
     private TextView textPassword;
-    private Button forgotPassword,loginBtn,registerBtn;
+    Button forgotPassword,loginBtn,registerBtn;
     private EmailAndPassword emailAndPassword;
-    private SignInButton googleBtn;
+    SignInButton googleBtn;
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInOptions gso;
     private static int RC_SIGN_IN = 1;
@@ -55,10 +49,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //Facebook
     private CallbackManager callbackManager;
-    private LoginButton loginButton;
+    LoginButton loginButton;
     private static final String EMAIL = "email";
     private boolean login, register, ForgotPassword;
-    private PermissionManager permissionManager;
+    PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,15 +1,16 @@
 package vatsalchavda.mobileusagerestriction;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressLint("Registered")
 public class EmailAndPassword extends LoginActivity{
 
     FirebaseAuth mAuth;
@@ -33,11 +34,7 @@ public class EmailAndPassword extends LoginActivity{
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(user.isEmailVerified()){
-                            LoginResult = true;
-                        }else{
-                            LoginResult = false;
-                        }
+                        LoginResult = user.isEmailVerified();
                      }
                 });
             return LoginResult;
@@ -54,15 +51,10 @@ public class EmailAndPassword extends LoginActivity{
                         +"[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
                         +"([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
-        CharSequence inputStr = email;
-
         Pattern pattern = Pattern.compile(regExpn,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
+        Matcher matcher = pattern.matcher(email);
 
-        if(matcher.matches())
-            return true;
-        else
-            return false;
+        return matcher.matches();
     }
 
     //Register method
@@ -99,8 +91,9 @@ public class EmailAndPassword extends LoginActivity{
         }else
             return false;
     }
-    private boolean sendVerificationEmail(){
+    private void sendVerificationEmail(){
         FirebaseUser user = mAuth.getCurrentUser();
+        assert user != null;
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -108,6 +101,5 @@ public class EmailAndPassword extends LoginActivity{
                         EmailVerification = true;
                     }
                 });
-        return EmailVerification;
     }
 }

@@ -4,9 +4,10 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot password?</string>
-    <string name="or_else_you_can_sign_in_using_google">Or else you can sign in using below</string>
+    <string name="or_else_you_can_sign_in_using_google">
+        Or else you can sign in using below
+    </string>
     <string name="register">Register</string>
-    <string name="logout">Logout</string>
     <string name="textview">TextView</string>
     <string name="todo">TODO</string>
     <string name="facebook_app_id">271782710098561</string>
@@ -14,5 +15,16 @@
     <string name="start_updates">START LOCATION UPDATES</string>
     <string name="stop_updates">STOP LOCATION UPDATES</string>
     <string name="get_last_location">GET LAST LOCATION</string>
-    <string name="location_updates_will_be_received_only_when_app_is_foreground">Location updates will be received only when app is foreground</string>
+    <string name="location_updates_will_be_received_only_when_app_is_foreground">
+        Location updates will be received only when app is foreground
+    </string>
+    <string name="start_call_block">Start Call Block</string>
+    <string name="stop_call_block">Stop Call Block</string>
+    <string name="logout">Logout</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="login_successful">Login Successful</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="message">Message</string>
+    <string name="button">Button</string>
+    <string name="block_calls">Block Calls</string>
 </resources>
