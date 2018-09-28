@@ -26,9 +26,9 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                     m.setAccessible(true);
                     telephonyService = (ITelephony) m.invoke(tm);
 
-                    if ((number != null) && LocationActivity.callBlockPermission == 1) {
+                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed >= 25)) {
                         telephonyService.endCall();
-                        Toast.makeText(context, "Ending the call from: " + number, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Ending the call from: " + number+" because speed > 25KMPH", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -37,13 +37,13 @@ public class IncomingCallReceiver extends BroadcastReceiver {
 
                 Toast.makeText(context, "Ring " + number, Toast.LENGTH_SHORT).show();
             }
-            if(state.equalsIgnoreCase(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+           /* if(state.equalsIgnoreCase(TelephonyManager.EXTRA_STATE_OFFHOOK)){
                 Toast.makeText(context, "Answered " + number, Toast.LENGTH_SHORT).show();
             }
             if(state.equalsIgnoreCase(TelephonyManager.EXTRA_STATE_IDLE)){
                 Toast.makeText(context, "Idle "+ number, Toast.LENGTH_SHORT).show();
             }
-
+            */
 
         } catch (Exception e) {
             e.printStackTrace();

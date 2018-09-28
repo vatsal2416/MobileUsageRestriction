@@ -58,6 +58,7 @@ public class LocationActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     LoginManager loginManager;
     public static int callBlockPermission = 0;
+    public static double calSpeed = 0;
     public static final String TAG = LocationActivity.class.getSimpleName();
 
     @BindView(R.id.location_result)
@@ -235,7 +236,7 @@ public class LocationActivity extends AppCompatActivity {
 
             tripDistance = getDistance(startLatitude,startLongitude,endLatitude,endLongitude);
 
-            double calSpeed = mCurrentLocation.getSpeed() * 1.60934;
+            calSpeed = mCurrentLocation.getSpeed() * 1.60934;
             distance.setText("Distance : "+String.valueOf(Math.round(tripDistance)));
             speed.setText("Speed : "+calSpeed);
 

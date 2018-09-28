@@ -70,9 +70,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnSendSMS"
-            style="@android:style/Widget.Material.Button.Borderless.Small"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="sendSMSClass"
@@ -80,7 +81,7 @@
 
         <Button
             android:id="@+id/btnCallBlock"
-            style="@android:style/Widget.Material.Button.Borderless.Small"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/block_calls" />
