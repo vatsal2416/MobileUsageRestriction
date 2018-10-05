@@ -17,6 +17,13 @@ Features added till now :
       > Gets Latitude and Longitude using Location class.
       > Gets Distance covered in Kilometers.
       > Gets Speed in Kilometers per Hour (KPH).
-    --Can send SMS
+    
+    --Send SMS
+      >Sends SMS when the Services are running.
+      >Only send SMS to contacts which are saved by user.
+    
+    --Call Block
+      >Both saved and unsaved Contact's calls will be blocked when the services are running.
+        
       
 Any updates will be added as soon as are Developed.
