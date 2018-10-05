@@ -54,7 +54,7 @@ import butterknife.OnClick;
 
 public class LocationActivity extends AppCompatActivity {
 
-    Button logoutBtn, btnCallBlock;
+    public static Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
     public static int callBlockPermission = 0;
@@ -103,6 +103,38 @@ public class LocationActivity extends AppCompatActivity {
         locationAquired = false;
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        startLocation = findViewById(R.id.btn_start_location_updates);
+        stopLocation = findViewById(R.id.btn_stop_location_updates);
+        getLastLocation = findViewById(R.id.btn_get_last_location);
+
+        startLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startLocationButtonClick();
+        //        btnCallBlock.performClick();
+                callBlockPermission = 1;
+                startLocation.setClickable(false);
+                stopLocation.setClickable(true);
+            }
+        });
+
+        stopLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopLocationButtonClick();
+                //btnCallBlock.performClick();
+                callBlockPermission = 0;
+                stopLocation.setClickable(false);
+                startLocation.setClickable(true);
+            }
+        });
+
+        getLastLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLastKnownLocation();
+            }
+        });
         distance = findViewById(R.id.textView3);
         speed = findViewById(R.id.textView4);
         logoutBtn = findViewById(R.id.logoutBtn);
@@ -130,7 +162,7 @@ public class LocationActivity extends AppCompatActivity {
 
         restoreValuesFromBundle(savedInstanceState);
 
-        btnCallBlock.setOnClickListener(new View.OnClickListener() {
+    /*    btnCallBlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(callBlockPermission == 0){
@@ -141,7 +173,7 @@ public class LocationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Stopped call Blocking",Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
     }
 
@@ -220,11 +252,11 @@ public class LocationActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void updateLocationUI(){
         if(mCurrentLocation != null){
-            txtLocationResult.setText(
+     /*       txtLocationResult.setText(
                     "Latitude: "+mCurrentLocation.getLatitude()+"\n"+
                             "Longitude: "+mCurrentLocation.getLongitude()
             );
-            if(!locationAquired){
+       */     if(!locationAquired){
                 startLatitude = mCurrentLocation.getLatitude();
                 startLongitude = mCurrentLocation.getLongitude();
                 locationAquired=true;
@@ -237,15 +269,15 @@ public class LocationActivity extends AppCompatActivity {
             tripDistance = getDistance(startLatitude,startLongitude,endLatitude,endLongitude);
 
             calSpeed = mCurrentLocation.getSpeed() * 1.60934;
-            distance.setText("Distance : "+String.valueOf(Math.round(tripDistance)));
+          //  distance.setText("Distance : "+String.valueOf(Math.round(tripDistance)));
             speed.setText("Speed : "+calSpeed);
 
             //givina a blink animation on TextView
-            txtLocationResult.setAlpha(0);
-            txtLocationResult.animate().alpha(1).setDuration(500);
+          //  txtLocationResult.setAlpha(0);
+          //  txtLocationResult.animate().alpha(1).setDuration(500);
 
             //location last updated time
-            txtUpdatedOn.setText("Last updated on: "+mLastUpdateTime);
+          //  txtUpdatedOn.setText("Last updated on: "+mLastUpdateTime);
         }
         toggleButtons();
     }
@@ -280,12 +312,13 @@ public class LocationActivity extends AppCompatActivity {
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                         Log.i(TAG, "All location settings are satisfied");
 
-                        Toast.makeText(getApplicationContext(),"Started location updates!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Started location updates!", Toast.LENGTH_SHORT).show();
 
                         //noinspection MissingPermission
                         mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                                 mLocationCallback, Looper.myLooper());
                         distance.setText(null);
+                        btnCallBlock.performClick();
                         updateLocationUI();
                     }
                 })
@@ -321,7 +354,6 @@ public class LocationActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick(R.id.btn_start_location_updates)
     public void startLocationButtonClick(){
         Dexter.withActivity(this)
                 .withPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -347,7 +379,6 @@ public class LocationActivity extends AppCompatActivity {
                 }).check();
     }
 
-    @OnClick(R.id.btn_stop_location_updates)
     public void stopLocationButtonClick(){
         mRequestingLocationUpdates = false;
         stopLocationUpdates();
@@ -355,18 +386,18 @@ public class LocationActivity extends AppCompatActivity {
 
     public void stopLocationUpdates(){
         //Removing location updates
+        btnCallBlock.performClick();
         mFusedLocationClient
                 .removeLocationUpdates(mLocationCallback)
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Location update stopped!", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getApplicationContext(), "Location update stopped!", Toast.LENGTH_SHORT).show();
                         toggleButtons();
                     }
                 });
     }
 
-    @OnClick(R.id.btn_get_last_location)
     public void showLastKnownLocation(){
         if(mCurrentLocation != null){
             Toast.makeText(getApplicationContext(), "Latitude: "+mCurrentLocation.getLatitude()
@@ -430,6 +461,12 @@ public class LocationActivity extends AppCompatActivity {
             //pausing location updates
             stopLocationUpdates();
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
+
     }
 }
 

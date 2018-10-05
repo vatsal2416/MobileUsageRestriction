@@ -27,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginSuccess" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -50,13 +49,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".LocationActivity" />
-        <activity android:name=".SendSMS"></activity>
+        <activity android:name=".SendSMS" />
 
-        <receiver  android:name=".IncomingCallReceiver" android:enabled="true" android:exported="true">
+        <receiver
+            android:name=".IncomingCallReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".StartService"></activity>
     </application>
 
 </manifest>
