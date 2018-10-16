@@ -60,7 +60,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".StartService"></activity>
     </application>
 
 </manifest>

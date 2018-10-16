@@ -49,12 +49,10 @@ import java.text.DateFormat;
 import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 
 public class LocationActivity extends AppCompatActivity {
 
-    public static Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation;
+    public Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
     public static int callBlockPermission = 0;
@@ -111,10 +109,7 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startLocationButtonClick();
-        //        btnCallBlock.performClick();
                 callBlockPermission = 1;
-                startLocation.setClickable(false);
-                stopLocation.setClickable(true);
             }
         });
 
@@ -122,10 +117,7 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stopLocationButtonClick();
-                //btnCallBlock.performClick();
                 callBlockPermission = 0;
-                stopLocation.setClickable(false);
-                startLocation.setClickable(true);
             }
         });
 
@@ -162,25 +154,7 @@ public class LocationActivity extends AppCompatActivity {
 
         restoreValuesFromBundle(savedInstanceState);
 
-    /*    btnCallBlock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(callBlockPermission == 0){
-                    callBlockPermission = 1;
-                    Toast.makeText(getApplicationContext(),"Started call Blocking",Toast.LENGTH_SHORT).show();
-                }else if(callBlockPermission == 1){
-                    callBlockPermission = 0;
-                    Toast.makeText(getApplicationContext(),"Stopped call Blocking",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
     }
-
-    public void sendSMSClass(View view){
-        startActivity(new Intent(LocationActivity.this,SendSMS.class));
-    }
-
 
     private void signOut() {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
@@ -268,9 +242,9 @@ public class LocationActivity extends AppCompatActivity {
 
             tripDistance = getDistance(startLatitude,startLongitude,endLatitude,endLongitude);
 
-            calSpeed = mCurrentLocation.getSpeed() * 1.60934;
+            calSpeed = mCurrentLocation.getSpeed() * 3.6;
           //  distance.setText("Distance : "+String.valueOf(Math.round(tripDistance)));
-            speed.setText("Speed : "+calSpeed);
+            speed.setText("Speed (KMPH) : "+Math.round(calSpeed));
 
             //givina a blink animation on TextView
           //  txtLocationResult.setAlpha(0);
@@ -294,9 +268,11 @@ public class LocationActivity extends AppCompatActivity {
         if(mRequestingLocationUpdates){
             btnStartUpdates.setEnabled(false);
             btnStopUpdates.setEnabled(true);
+            speed.setVisibility(View.VISIBLE);
         }else{
             btnStartUpdates.setEnabled(true);
             btnStopUpdates.setEnabled(false);
+            speed.setVisibility(View.INVISIBLE);
         }
     }
 

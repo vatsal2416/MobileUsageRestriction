@@ -1,12 +1,10 @@
 package vatsalchavda.mobileusagerestriction;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.icu.text.UnicodeSetSpanner;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
@@ -34,7 +32,7 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                     m.setAccessible(true);
                     telephonyService = (ITelephony) m.invoke(tm);
 
-                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed >= 15)) {
+                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed <= 15)) {
                         String name = getContactDisplayNameByNumber(number,context);
                         if(name.equals("?")){
                             telephonyService.endCall();
