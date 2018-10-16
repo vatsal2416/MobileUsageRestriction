@@ -24,6 +24,10 @@ Features added till now :
     
     --Call Block
       >Both saved and unsaved Contact's calls will be blocked when the services are running.
+      >But SMS will be sent to only saved contacts.
         
       
 Any updates will be added as soon as are Developed.
+
+APK of this Android Application is included in the Master Branch.
+It's minimum sdk version is 23
