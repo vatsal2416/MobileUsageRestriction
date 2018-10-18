@@ -32,7 +32,7 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                     m.setAccessible(true);
                     telephonyService = (ITelephony) m.invoke(tm);
 
-                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed <= 15)) {
+                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed >= 15)) {
                         String name = getContactDisplayNameByNumber(number,context);
                         if(name.equals("?")){
                             telephonyService.endCall();
