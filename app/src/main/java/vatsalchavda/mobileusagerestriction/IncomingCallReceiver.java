@@ -15,6 +15,10 @@ import java.lang.reflect.Method;
 import com.android.internal.telephony.ITelephony;
 
 public class IncomingCallReceiver extends BroadcastReceiver {
+
+    public static int speedLimit = 15;
+    public static String textMessage = "Sorry I can't pick up the Call,\nI am Driving right now, \nWill call you back later.";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -32,14 +36,20 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                     m.setAccessible(true);
                     telephonyService = (ITelephony) m.invoke(tm);
 
-                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed >= 15)) {
+                    if ((number != null) && (LocationActivity.callBlockPermission == 1) && (LocationActivity.calSpeed >= speedLimit)) {
                         String name = getContactDisplayNameByNumber(number,context);
                         if(name.equals("?")){
                             telephonyService.endCall();
                             Toast.makeText(context, "Ending the call from: " + number +" because speed > 15KMPH", Toast.LENGTH_LONG).show();
                         }else{
                             telephonyService.endCall();
-                            String textMessage = "Sorry I can't pick up the Call,\nI am Driving right now, \nWill call you back later.";
+                           // String textMessage;
+                            if(LocationActivity.customSMSset){
+                                textMessage = LocationActivity.customSMS_String;
+                             //   Toast.makeText(context, "Text Message : "+textMessage, Toast.LENGTH_SHORT).show();
+                            }else{
+                                textMessage = "Sorry I can't pick up the Call,\nI am Driving right now, \nWill call you back later.";
+                            }
                             SmsManager smsManager = SmsManager.getDefault();
                             smsManager.sendTextMessage(number,null,textMessage,null,null);
                             Toast.makeText(context,name + " is Calling. Ending call and Sending Message."

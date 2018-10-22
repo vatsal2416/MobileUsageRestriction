@@ -30,33 +30,15 @@
         android:visibility="gone" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal"
-        android:text="@string/location_updates_will_be_received_only_when_app_is_foreground"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/location_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="#333"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/updated_on"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:textSize="11sp"
-        tools:ignore="SmallSp" />
-
-    <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSetCustomSMS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Restrictions" />
 
     <TextView
         android:id="@+id/textView4"

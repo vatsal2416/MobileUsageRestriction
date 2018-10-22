@@ -47,23 +47,20 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import java.text.DateFormat;
 import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LocationActivity extends AppCompatActivity {
 
-    public Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation;
+    public Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation, setCustomSMS;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
     public static int callBlockPermission = 0;
     public static double calSpeed = 0;
     public static final String TAG = LocationActivity.class.getSimpleName();
+    public static boolean customSMSset = false;
 
-    @BindView(R.id.location_result)
-    TextView txtLocationResult;
-
-    @BindView(R.id.updated_on)
-    TextView txtUpdatedOn;
 
     @BindView(R.id.btn_start_location_updates)
     TextView btnStartUpdates;
@@ -71,6 +68,7 @@ public class LocationActivity extends AppCompatActivity {
     @BindView(R.id.btn_stop_location_updates)
     TextView btnStopUpdates;
 
+    public static String customSMS_String;
     //location last updated
     private String mLastUpdateTime;
 
@@ -90,6 +88,7 @@ public class LocationActivity extends AppCompatActivity {
     private boolean locationAquired;
     double startLatitude,startLongitude,endLongitude,endLatitude,tripDistance;
     private TextView distance, speed;
+    public TextView customSMS;
     //boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
 
@@ -101,6 +100,8 @@ public class LocationActivity extends AppCompatActivity {
         locationAquired = false;
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        //customSMS = findViewById(R.id.txtCustomSMS);
+        setCustomSMS = findViewById(R.id.btnSetCustomSMS);
         startLocation = findViewById(R.id.btn_start_location_updates);
         stopLocation = findViewById(R.id.btn_stop_location_updates);
         getLastLocation = findViewById(R.id.btn_get_last_location);
@@ -118,6 +119,22 @@ public class LocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 stopLocationButtonClick();
                 callBlockPermission = 0;
+            }
+        });
+
+        setCustomSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LocationActivity.this, SetRestrictions_Activity.class));
+              /*  if((customSMS.getText().toString().equals(""))){
+                    Toast.makeText(getApplicationContext(),"Custom SMS cannot be Empty",Toast.LENGTH_LONG).show();
+                    customSMSset = false;
+                }else{
+                    customSMS_String = customSMS.getText().toString().trim();
+                    Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                    customSMSset = true;
+                }
+              */
             }
         });
 
@@ -269,10 +286,14 @@ public class LocationActivity extends AppCompatActivity {
             btnStartUpdates.setEnabled(false);
             btnStopUpdates.setEnabled(true);
             speed.setVisibility(View.VISIBLE);
+            setCustomSMS.setEnabled(false);
+      //      customSMS.setEnabled(false);
         }else{
             btnStartUpdates.setEnabled(true);
             btnStopUpdates.setEnabled(false);
             speed.setVisibility(View.INVISIBLE);
+            setCustomSMS.setEnabled(true);
+//            customSMS.setEnabled(true);
         }
     }
 
@@ -309,7 +330,7 @@ public class LocationActivity extends AppCompatActivity {
                                         "location settings ");
                                 try{
 
-                                    txtUpdatedOn.setText("Failed to get Permission");
+                                   // txtUpdatedOn.setText("Failed to get Permission");
                                     //show the dialog by calling startResolutionForResult(), and check the
                                     //result in OnActivityResult().
                                     ResolvableApiException rae = (ResolvableApiException) e;
