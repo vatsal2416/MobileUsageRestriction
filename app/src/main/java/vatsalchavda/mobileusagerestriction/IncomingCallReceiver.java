@@ -18,7 +18,7 @@ public class IncomingCallReceiver extends BroadcastReceiver {
 
     public static int speedLimit = 15;
     public static String textMessage = "Sorry I can't pick up the Call,\nI am Driving right now, \nWill call you back later.";
-
+    public static boolean sendSMSFlag;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -43,18 +43,23 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                             Toast.makeText(context, "Ending the call from: " + number +" because speed > 15KMPH", Toast.LENGTH_LONG).show();
                         }else{
                             telephonyService.endCall();
-                           // String textMessage;
+                            // String textMessage;
                             if(LocationActivity.customSMSset){
                                 textMessage = LocationActivity.customSMS_String;
-                             //   Toast.makeText(context, "Text Message : "+textMessage, Toast.LENGTH_SHORT).show();
+                                //   Toast.makeText(context, "Text Message : "+textMessage, Toast.LENGTH_SHORT).show();
                             }else{
                                 textMessage = "Sorry I can't pick up the Call,\nI am Driving right now, \nWill call you back later.";
                             }
-                            SmsManager smsManager = SmsManager.getDefault();
-                            smsManager.sendTextMessage(number,null,textMessage,null,null);
-                            Toast.makeText(context,name + " is Calling. Ending call and Sending Message."
-                                    +"\nMessage sent to : "+name,Toast.LENGTH_LONG).show();
+                            System.out.println("--------------------------------\n-----sendSMS : "+SetRestrictions_Activity.sendSMS+"\n------------------------");
+                            if(sendSMSFlag){
+                                SmsManager smsManager = SmsManager.getDefault();
+                                smsManager.sendTextMessage(number,null,textMessage,null,null);
+                                Toast.makeText(context,name + " is Calling. Ending call and Sending Message."
+                                        +"\nMessage sent to : "+name,Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(context,"Call Rejected due to Speed Limit.",Toast.LENGTH_SHORT).show();
                             }
+                        }
                     }
 
                 } catch (Exception e) {

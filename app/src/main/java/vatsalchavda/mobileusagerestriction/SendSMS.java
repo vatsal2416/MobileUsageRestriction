@@ -29,9 +29,12 @@ public class SendSMS extends AppCompatActivity {
                 if((mobileNumber.getText().toString()).equals("") || (mobileNumber.getText().toString()).equals("")){
                     Toast.makeText(getApplicationContext(),"Mobile number or Message cannot be Empty!",Toast.LENGTH_SHORT).show();
                 }else{
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(mobileNumber.getText().toString(),null,textMessage.getText().toString(),null,null);
-                    Toast.makeText(getApplicationContext(),"Message sent.", Toast.LENGTH_SHORT).show();
+                        if(SetRestrictions_Activity.sendSMS){
+                            SmsManager smsManager = SmsManager.getDefault();
+
+                            smsManager.sendTextMessage(mobileNumber.getText().toString(),null,textMessage.getText().toString(),null,null);
+                            Toast.makeText(getApplicationContext(),"Message sent.", Toast.LENGTH_SHORT).show();
+                        }
                 }
             }
         });

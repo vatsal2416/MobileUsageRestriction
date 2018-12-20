@@ -3,13 +3,16 @@ package vatsalchavda.mobileusagerestriction;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +21,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.facebook.login.LoginManager;
@@ -46,6 +51,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -53,6 +60,9 @@ import butterknife.ButterKnife;
 
 public class LocationActivity extends AppCompatActivity {
 
+    private TextView textCounter;
+    private boolean count = false;
+    private NotificationManager mNotificationManager;
     public Button logoutBtn, btnCallBlock, startLocation, stopLocation, getLastLocation, setCustomSMS;
     private GoogleSignInOptions gso;
     LoginManager loginManager;
@@ -60,7 +70,7 @@ public class LocationActivity extends AppCompatActivity {
     public static double calSpeed = 0;
     public static final String TAG = LocationActivity.class.getSimpleName();
     public static boolean customSMSset = false;
-
+    DatabaseHelper databaseHelper;
 
     @BindView(R.id.btn_start_location_updates)
     TextView btnStartUpdates;
@@ -87,10 +97,15 @@ public class LocationActivity extends AppCompatActivity {
     private Location mCurrentLocation;
     private boolean locationAquired;
     double startLatitude,startLongitude,endLongitude,endLatitude,tripDistance;
+    String startTime, endTime;
     private TextView distance, speed;
     public TextView customSMS;
+
     //boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
+    private SimpleDateFormat mdformat;
+    private Calendar calendar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +113,24 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location);
         ButterKnife.bind(this);
         locationAquired = false;
+        SetRestrictions_Activity.sendSMS = true;
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        databaseHelper = new DatabaseHelper(this);
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        //get Time
+        calendar = Calendar.getInstance();
+        mdformat = new SimpleDateFormat("HH:mm:ss");
+
+        Button retriveData = findViewById(R.id.button3);
+        retriveData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LocationActivity.this,RetriveData.class));
+            }
+        });
+
+        textCounter = findViewById(R.id.textCounter);
 
         //customSMS = findViewById(R.id.txtCustomSMS);
         setCustomSMS = findViewById(R.id.btnSetCustomSMS);
@@ -111,6 +143,9 @@ public class LocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startLocationButtonClick();
                 callBlockPermission = 1;
+                count = true;
+               // startCounter();
+                Toast.makeText(getApplicationContext(),"Database Created",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -243,11 +278,7 @@ public class LocationActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void updateLocationUI(){
         if(mCurrentLocation != null){
-     /*       txtLocationResult.setText(
-                    "Latitude: "+mCurrentLocation.getLatitude()+"\n"+
-                            "Longitude: "+mCurrentLocation.getLongitude()
-            );
-       */     if(!locationAquired){
+            if(!locationAquired){
                 startLatitude = mCurrentLocation.getLatitude();
                 startLongitude = mCurrentLocation.getLongitude();
                 locationAquired=true;
@@ -310,11 +341,16 @@ public class LocationActivity extends AppCompatActivity {
                         Log.i(TAG, "All location settings are satisfied");
 
                         //Toast.makeText(getApplicationContext(),"Started location updates!", Toast.LENGTH_SHORT).show();
+                        changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_NONE);
+                        Toast.makeText(getApplicationContext(),"All notification disabled.",Toast.LENGTH_LONG).show();
 
                         //noinspection MissingPermission
                         mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                                 mLocationCallback, Looper.myLooper());
                         distance.setText(null);
+                        //startTime = SystemClock.elapsedRealtime();
+                        //startTime = mdformat.format(calendar.getTime());
+                        startTime = DateFormat.getDateTimeInstance().format(new Date());
                         btnCallBlock.performClick();
                         updateLocationUI();
                     }
@@ -378,7 +414,70 @@ public class LocationActivity extends AppCompatActivity {
 
     public void stopLocationButtonClick(){
         mRequestingLocationUpdates = false;
+        changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_ALL);
+//        Toast.makeText(getApplicationContext(),"All notification Enables.",Toast.LENGTH_LONG).show();
         stopLocationUpdates();
+       // endTime = mdformat.format(calendar.getTime());
+        //endTime = SystemClock.elapsedRealtime();
+        endTime = DateFormat.getDateTimeInstance().format(new Date());
+        boolean result = databaseHelper.insertUserData(startLatitude,endLatitude,startLongitude,endLongitude,startTime,endTime,tripDistance);
+        if(result){
+            Toast.makeText(getApplicationContext(),"Trip details recorded.",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(),"Something went wrong while inserting data!",Toast.LENGTH_SHORT).show();
+        }
+    }
+    protected void changeInterruptionFiler(int interruptionFilter){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ // If api level minimum 23
+            /*
+                boolean isNotificationPolicyAccessGranted ()
+                    Checks the ability to read/modify notification policy for the calling package.
+                    Returns true if the calling package can read/modify notification policy.
+                    Request policy access by sending the user to the activity that matches the
+                    system intent action ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS.
+
+                    Use ACTION_NOTIFICATION_POLICY_ACCESS_GRANTED_CHANGED to listen for
+                    user grant or denial of this access.
+
+                Returns
+                    boolean
+
+            */
+            // If notification policy access granted for this package
+            if(mNotificationManager.isNotificationPolicyAccessGranted()){
+                /*
+                    void setInterruptionFilter (int interruptionFilter)
+                        Sets the current notification interruption filter.
+
+                        The interruption filter defines which notifications are allowed to interrupt
+                        the user (e.g. via sound & vibration) and is applied globally.
+
+                        Only available if policy access is granted to this package.
+
+                    Parameters
+                        interruptionFilter : int
+                        Value is INTERRUPTION_FILTER_NONE, INTERRUPTION_FILTER_PRIORITY,
+                        INTERRUPTION_FILTER_ALARMS, INTERRUPTION_FILTER_ALL
+                        or INTERRUPTION_FILTER_UNKNOWN.
+                */
+
+                // Set the interruption filter
+                mNotificationManager.setInterruptionFilter(interruptionFilter);
+            }else {
+                /*
+                    String ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS
+                        Activity Action : Show Do Not Disturb access settings.
+                        Users can grant and deny access to Do Not Disturb configuration from here.
+
+                    Input : Nothing.
+                    Output : Nothing.
+                    Constant Value : "android.settings.NOTIFICATION_POLICY_ACCESS_SETTINGS"
+                */
+                // If notification policy access not granted for this package
+                Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                startActivity(intent);
+            }
+        }
     }
 
     public void stopLocationUpdates(){
@@ -391,6 +490,7 @@ public class LocationActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                       //  Toast.makeText(getApplicationContext(), "Location update stopped!", Toast.LENGTH_SHORT).show();
                         toggleButtons();
+                       // databaseHelper.insertUserData(startLatitude,endLatitude,startLongitude,endLongitude);
                     }
                 });
     }
@@ -464,6 +564,19 @@ public class LocationActivity extends AppCompatActivity {
         super.onBackPressed();
         System.exit(0);
 
+    }
+
+    public void startCounter(){
+        int counter = 0;
+        for(int i = 0 ; count!=false ; i++){
+            try{
+                Thread.sleep(1000);
+                counter++;
+               Toast.makeText(getApplicationContext(),"Counter : "+counter,Toast.LENGTH_SHORT).show();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
 

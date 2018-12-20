@@ -5,16 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SetRestrictions_Activity extends AppCompatActivity {
 
+    public static Switch smsSwitch;
+    public static boolean sendSMS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_restrictions_);
-
+        smsSwitch = findViewById(R.id.switch1);
         Button btnLimit, btnSMS, btnBack;
         final TextView txtLimit, txtSMS;
 
@@ -29,6 +34,15 @@ public class SetRestrictions_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SetRestrictions_Activity.this,LocationActivity.class));
+            }
+        });
+
+        smsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sendSMS = isChecked;
+                IncomingCallReceiver.sendSMSFlag = isChecked;
+                Toast.makeText(getApplicationContext(),"sendSMS : "+IncomingCallReceiver.sendSMSFlag,Toast.LENGTH_LONG).show();
             }
         });
 
