@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "681939049838-5vn626lgp633p44dmrqncnrtanepemhf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vatsalchavda.mobileusagerestriction",
+            "certificate_hash": "2e835b697b5f4af279614c7884a29fcdf0184168"
+          }
+        },
+        {
           "client_id": "681939049838-uhbcfbbvkrjsumd7p202chbfntqr9d1u.apps.googleusercontent.com",
           "client_type": 3
         }
