@@ -2,6 +2,7 @@ package vatsalchavda.mobileusagerestriction;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.icu.text.UnicodeSetSpanner;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -46,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private static int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
-
+    public static String accountName;
     //Facebook
     private CallbackManager callbackManager;
     LoginButton loginButton;
@@ -99,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Toast.makeText(getApplicationContext(),"Facebook login successful.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Welcome",Toast.LENGTH_LONG).show();
                         startActivity(new Intent(LoginActivity.this, LocationActivity.class));
                     }
 
@@ -239,14 +241,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account){
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount account){
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                               accountName = account.getDisplayName();
                             // Sign in success, update UI with the signed-in user's information
                             startActivity(new Intent(LoginActivity.this,LocationActivity.class));
                         } else {

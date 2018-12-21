@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private DatabaseReference mDatabase;
 
     public static final String DATABASE_NAME = "Speed_Pattern";
     public static final String TABLE_NAME = "Driver_Details";
@@ -21,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME,null, 1);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -49,6 +54,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(END_TIME,stopTime);
         contentValues.put(DISTANCE,distance);
         long result = db.insert(TABLE_NAME,null, contentValues);
+
+        //Insert data in Firebase Database
+        String accountName = LoginActivity.accountName;
+        mDatabase.child(accountName).child("StartLatitude").setValue(startLatitude);
+        mDatabase.child(accountName).child("StopLatitude").setValue(stopLatitude);
+        mDatabase.child(accountName).child("StartLongitude").setValue(startLongitude);
+        mDatabase.child(accountName).child("stopLongitude").setValue(stopLongitude);
+        mDatabase.child(accountName).child("startTime").setValue(startTime);
+        mDatabase.child(accountName).child("stopTime").setValue(stopTime);
+        mDatabase.child(accountName).child("distance").setValue(distance);
+
         return result != -1;
     }
 
@@ -57,4 +73,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select * from Driver_Details",null);
         return cursor;
     }
+
 }

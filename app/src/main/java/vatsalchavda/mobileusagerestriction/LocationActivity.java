@@ -422,7 +422,7 @@ public class LocationActivity extends AppCompatActivity {
         endTime = DateFormat.getDateTimeInstance().format(new Date());
         boolean result = databaseHelper.insertUserData(startLatitude,endLatitude,startLongitude,endLongitude,startTime,endTime,tripDistance);
         if(result){
-            Toast.makeText(getApplicationContext(),"Trip details recorded.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Trip details recorded and inserted in Firebase.",Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(getApplicationContext(),"Something went wrong while inserting data!",Toast.LENGTH_SHORT).show();
         }
